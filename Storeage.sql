@@ -1,6 +1,7 @@
 --the table to store users
 create table users(
 	username char(20) primary key,
+	legalName char(20),
 	password char(25) NOT NULL,
 	email char(20) NOT NULL,
 	cellnum char(20),
