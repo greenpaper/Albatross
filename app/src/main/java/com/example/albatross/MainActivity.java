@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText input;
+    Button begin;
     SmsManager smsManager = SmsManager.getDefault();
 
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
@@ -29,6 +30,15 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
         }
+        begin = findViewById(R.id.button);
+
+        begin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("THIS PRINTED%%%%%%%");
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

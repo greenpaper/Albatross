@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Albatross.iml" filepath="$PROJECT_DIR$/Albatross.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/postgresql-42.2.5/postgresql-42.2.5.iml" filepath="$PROJECT_DIR$/postgresql-42.2.5/postgresql-42.2.5.iml" />
     </modules>
   </component>
 </project>

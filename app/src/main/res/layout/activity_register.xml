@@ -8,8 +8,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/State"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="309dp"
+        android:layout_height="49dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -17,6 +17,7 @@
         app:layout_constraintTop_toBottomOf="@+id/City">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/StateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="State"
@@ -25,8 +26,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/City"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="308dp"
+        android:layout_height="51dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -34,6 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Phone">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/CityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="City"
@@ -42,8 +44,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/Phone"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="310dp"
+        android:layout_height="55dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -51,6 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Password">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/PhoneText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
@@ -59,8 +62,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/Password"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="308dp"
+        android:layout_height="52dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -68,6 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Username">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/PasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
@@ -76,8 +80,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/Username"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -85,6 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Email">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/UsernameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"
@@ -93,8 +98,8 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/Email"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_width="308dp"
+        android:layout_height="52dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -102,6 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Name">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/EmailText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Email"
@@ -111,14 +117,15 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/Name"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="306dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/NameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
@@ -127,15 +134,17 @@
 
     <Button
         android:id="@+id/registration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/State"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>
