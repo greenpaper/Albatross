@@ -30,6 +30,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.albatross.DatabaseHelper;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +78,15 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private final AppCompatActivity activity = LoginActivity2.this;
+    //private InputValidation inputValidation;
+    private DatabaseHelper databaseHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Start of login");
+        databaseHelper = new DatabaseHelper(activity);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
         // Set up the login form.
@@ -82,23 +104,30 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 return false;
             }
         });
-
+        System.out.println("We have made it oast attempLogin");
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+                System.out.println("Done with login number 2");
             }
         });
-
+        System.out.println("After onClick");
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        //attemptLogin();
         Button signinButton = findViewById(R.id.email_sign_in_button);
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity2.this, MainActivity.class));
+                if(attemptLogin())
+                {
+                    startActivity(new Intent(LoginActivity2.this, MainActivity.class));
+                }
+                else {
+                    Toast.makeText(activity, "Message sent!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -152,11 +181,11 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private boolean attemptLogin() {
         if (mAuthTask != null) {
-            return;
+            return false;
         }
-
+        System.out.println("We are attempting login");
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -172,18 +201,21 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         }
 
         if (cancel) {
@@ -194,9 +226,22 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            System.out.println("we will decide now");
+            if(databaseHelper.checkUser(email, password))
+            {
+                System.out.println("WE GOT HIM SIR");
+                return true;
+            }
+            else
+            {
+                System.out.println("Mission failed, well get them next time");
+                return false;
+            }
+
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
+        return false;
     }
 
     private boolean isEmailValid(String email) {
