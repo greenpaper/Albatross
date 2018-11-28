@@ -22,11 +22,11 @@ public class User {
         this.phone = num;
     }
 
-    public String getname(){
+    public String getName(){
         String n = this.name;
         return n;
     }
-    public String getemail(){
+    public String getEmail(){
         String e = this.email;
         return e;
     }
@@ -34,8 +34,12 @@ public class User {
         int num = this.phone;
         return num;
     }
-    public String get_username(){
+    public String getUname(){
         String un = this.username;
+        return un;
+    }
+    public String getPassword(){
+        String un = this.password;
         return un;
     }
     public void add_contact(String name, int num, int clearance){

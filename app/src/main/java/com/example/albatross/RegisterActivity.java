@@ -25,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Made the database");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -37,13 +38,22 @@ public class RegisterActivity extends AppCompatActivity {
         state = findViewById(R.id.StateText);
         register = findViewById(R.id.registration);
 
+
         System.out.println("THIS PRINTED********");
+
+
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkDataEntered();
+                DatabaseHelper dbs = new DatabaseHelper(RegisterActivity.this);
                 System.out.println("THIS PRINTED%%%%%%%");
-                startDatabase();
+                User newu = new User();
+                newu.setName(name.getText().toString());
+                newu.setEmail(email.getText().toString());
+                newu.setUsername(username.getText().toString());
+                newu.setPassword(password.getText().toString());
+                dbs.addUser(newu);
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 System.out.println("THIS PRINTED");
             }
