@@ -30,6 +30,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.albatross.DatabaseHelper;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +63,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
     /**
      * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
@@ -62,9 +77,22 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private final AppCompatActivity activity = LoginActivity2.this;
+    //private InputValidation inputValidation;
+    private DatabaseHelper databaseHelper;
 
+    /*	@param savedInstanceState as the current state of the application
+	 *
+    	@effects initialize database and various other application processes
+                 check if a user is in the database to log in
+    	@modifies nothing
+    	@throws nothing
+    	@return nothing
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Start of login");
+        databaseHelper = new DatabaseHelper(activity);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
         // Set up the login form.
@@ -73,6 +101,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            //if user has info saved to login, automatically process that
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -82,27 +111,44 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 return false;
             }
         });
-
+        //if user only inputs email, attempt login as they may have saved password info
+        System.out.println("We have made it oast attempLogin");
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+                System.out.println("Done with login number 2");
             }
         });
-
+        System.out.println("After onClick");
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        //attemptLogin();
         Button signinButton = findViewById(R.id.email_sign_in_button);
+        //if the button to login is pressed, attempt login action using info in the text boxes
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity2.this, MainActivity.class));
+                if(attemptLogin())
+                {
+                    //if the user info is correct continue
+                    startActivity(new Intent(LoginActivity2.this, MainActivity.class));
+                }
+                else {
+                    //if incorrect do not allow a user to login
+                    Toast.makeText(activity, "Message sent!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
-
+    /*	@param nothing
+	 *
+    	@effects auto complete info for users
+    	@modifies view for user
+    	@throws nothing
+    	@return nothing
+	 */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -110,7 +156,13 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         getLoaderManager().initLoader(0, null, this);
     }
-
+    /*	@param nothing
+	 *
+    	@effects check if a user has privilege to request contacts
+    	@modifies view for user
+    	@throws nothing
+    	@return nothing
+	 */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -152,11 +204,11 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private boolean attemptLogin() {
         if (mAuthTask != null) {
-            return;
+            return false;
         }
-
+        System.out.println("We are attempting login");
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -172,18 +224,21 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            cancel = true;
+            //cancel = true;
+            cancel = false;
         }
 
         if (cancel) {
@@ -194,18 +249,45 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            System.out.println("we will decide now");
+            if(databaseHelper.checkUser(email, password))
+            {
+                //we have found a user matching this info so allow login
+                System.out.println("WE GOT HIM SIR");
+                return true;
+            }
+            else
+            {
+                //user info not found so dont allow
+                System.out.println("Mission failed, well get them next time");
+                return false;
+            }
+
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
+        return false;
     }
 
+    /*	@param email
+	 *
+    	@effects check if the email string is valid
+    	@modifies nothing
+    	@throws nothing
+    	@return bool on correctness
+	 */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
+    /*	@param password
+	 *
+    	@effects nothing
+    	@modifies nothing
+    	@throws nothing
+    	@return bool on password correctness
+	 */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -244,7 +326,13 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
+    /*	@param i and bundle
+	 *
+    	@effects load stored data for the user
+    	@modifies view for user
+    	@throws nothing
+    	@return updated view for user
+	 */
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -261,7 +349,13 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
-
+    /*	@param cursorloader and cursor
+	 *
+    	@effects load stored data for the user
+    	@modifies view for user
+    	@throws nothing
+    	@return updated view for user
+	 */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -278,7 +372,13 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
+    /*	@param email collection
+	 *
+    	@effects load stored data for the user
+    	@modifies view for user
+    	@throws nothing
+    	@return updated view for user
+	 */
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -287,7 +387,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -312,10 +411,14 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             mEmail = email;
             mPassword = password;
         }
-
+        /*	@param nothing
+            @effects modify string of user info
+            @modifies nothing
+            @throws nothing
+            @return bool on if the account exists
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
@@ -332,10 +435,14 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 }
             }
 
-            // TODO: register the new account here.
             return true;
         }
-
+        /*	@param success
+            @effects load stored data for the user if success
+            @modifies view for user
+            @throws nothing
+            @return nothing
+	    */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
@@ -348,7 +455,12 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 mPasswordView.requestFocus();
             }
         }
-
+        /*	@param nothing
+            @effects cancel loading for the user
+            @modifies view for user
+            @throws nothing
+            @return nothing
+	    */
         @Override
         protected void onCancelled() {
             mAuthTask = null;

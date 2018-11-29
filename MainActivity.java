@@ -3,29 +3,24 @@ package com.example.albatross;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText input;
-    Button begin;
     SmsManager smsManager = SmsManager.getDefault();
-    /*	@param savedInstanceState as the current state of the application
-	 *
-    	@effects initialize route finding and personal user data
-    	@modifies user info when asked
-    	@throws nothing
-    	@return nothing
-	 */
+    private DrawerLayout mdrawerlayout;
+    private ActionBarDrawerToggle mToggle;
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -36,23 +31,21 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
         }
-        begin = findViewById(R.id.button);
-
-        begin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("THIS PRINTED%%%%%%%");
-                startActivity(new Intent(MainActivity.this, MapsActivity.class));
-            }
-        });
+        mdrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this,mdrawerlayout, R.string.Open, R.string.Close );
+        mdrawerlayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    /*	@param view state
-	 *
-    	@effects send message to a fellow contact
-    	@modifies nothing
-    	@throws nothing
-    	@return nothing
-	 */
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onSendClick(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
@@ -64,12 +57,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Message sent!", Toast.LENGTH_SHORT).show();
         }
     }
-    /*	    @param none
-            @effects get permission for user
-            @modifies nothing
-            @throws nothing
-            @return nothing
-	    */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void getPermissionToReadSMS() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
@@ -82,12 +69,6 @@ public class MainActivity extends AppCompatActivity {
                     READ_SMS_PERMISSIONS_REQUEST);
         }
     }
-    /*	    @param code, permission and if able to grant
-            @effects check if permission is given to user
-            @modifies nothing
-            @throws nothing
-            @return nothing
-	    */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],

@@ -22,9 +22,18 @@ public class RegisterActivity extends AppCompatActivity {
     EditText city;
     EditText state;
     Button register;
-
+    /*	@param savedInstanceState as the current state of the application
+	 *
+    	@effects initialize database and various other application processes
+    	         store a registering user into the database
+    	         route registered user to the MainActivity page next
+    	@modifies set user details if registering
+    	@throws nothing
+    	@return nothing
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Made the database");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -37,13 +46,23 @@ public class RegisterActivity extends AppCompatActivity {
         state = findViewById(R.id.StateText);
         register = findViewById(R.id.registration);
 
+
         System.out.println("THIS PRINTED********");
+
+
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkDataEntered();
+                DatabaseHelper dbs = new DatabaseHelper(RegisterActivity.this);
                 System.out.println("THIS PRINTED%%%%%%%");
-                startDatabase();
+                //create a new user to be inserted into the database
+                User newu = new User();
+                newu.setName(name.getText().toString());
+                newu.setEmail(email.getText().toString());
+                newu.setUsername(username.getText().toString());
+                newu.setPassword(password.getText().toString());
+                dbs.addUser(newu);
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 System.out.println("THIS PRINTED");
             }
@@ -52,17 +71,35 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
-
+    /*	@param email of user
+	 *
+    	@effects none
+    	@modifies nothing
+    	@throws nothing
+    	@return if an email is vaild
+	 */
     boolean isEmail(EditText text){
         CharSequence email = text.getText().toString();
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
-
+    /*	@param text of registering user
+	 *
+    	@effects none
+    	@modifies nothing
+    	@throws nothing
+    	@return if passed in text is empty or if it is valid
+	 */
     boolean isEmpty(EditText text){
         CharSequence str = text.getText().toString();
         return TextUtils.isEmpty(str);
     }
-
+    /*	@param nothing
+	 *
+    	@effects show to user if data used to register is valid
+    	@modifies nothing
+    	@throws nothing
+    	@return nothing
+	 */
     void checkDataEntered(){
         if(isEmpty(name)){
           Toast t = Toast.makeText(this, "Name is required to register", Toast.LENGTH_SHORT);
@@ -95,49 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void startDatabase(){
-
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/albatross", "postgres", "postgres")) {
-
-            System.out.println("Java JDBC PostgreSQL Example");
-            // When this class first attempts to establish a connection, it automatically loads any JDBC 4.0 drivers found within
-
-            // the class path. Note that your application must manually load any JDBC drivers prior to version 4.0.
-
-           //Class.forName("org.postgresql.Driver");
-
-            System.out.println("Connected to PostgreSQL database!");
-
-            Statement statement = connection.createStatement();
-
-            System.out.println("Reading car records...");
-
-            System.out.printf("%-30.30s  %-30.30s%n", "Model", "Price");
-
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM public.cars");
-
-            while (resultSet.next()) {
-
-                System.out.printf("%-30.30s  %-30.30s%n", resultSet.getString("model"), resultSet.getString("price"));
-
-            }
-
-
-        } /*catch (ClassNotFoundException e) {
-28
-            System.out.println("PostgreSQL JDBC driver not found.");
-29
-            e.printStackTrace();
-30
-        }*/ catch (SQLException e) {
-
-            System.out.println("Connection failure.");
-
-            e.printStackTrace();
-
-        }
-
-    }
 
 
 }
