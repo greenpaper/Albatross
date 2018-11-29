@@ -1,4 +1,4 @@
---the table to store users
+--out of data database
 create table users(
 	username char(20) primary key,
 	legalName char(20),

@@ -105,6 +105,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+    /*	    @param origin and dest
+            @effects set the url to find the route
+            @modifies nothing
+            @throws nothing
+            @return string of the route
+	    */
     private String getRequestUrl(LatLng origin, LatLng dest) {
         //start point
         String str_ori = "origin=" + origin.latitude + "," + origin.longitude;
@@ -122,7 +128,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
         return url;
     }
-
+    /*	    @param requrl
+            @effects request the route on google maps
+            @modifies nothing
+            @throws nothing
+            @return string of the route
+	    */
     private String requestDirection(String reqUrl) throws IOException {
         String response_string = "";
         InputStream inputStream = null;
@@ -156,7 +167,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return response_string;
     }
-
+    /*	    @param request code, permission, grant results
+            @effects show route if able
+            @modifies view for user
+            @throws nothing
+            @return nothing
+	    */
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -170,6 +186,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public class TaskRequestDirections extends AsyncTask<String,Void,String>{
+        /*	@param strings
+            @effects request the info for the route
+            @modifies nothing
+            @throws nothing
+            @return string of the response
+	    */
         @Override
         protected String doInBackground(String... strings){
             String responseString = "";
@@ -189,7 +211,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             taskParser.execute(s);
         }
     }
-
+    /*	    @param strings and lists
+            @effects parse the tasks given to the API
+            @modifies passed in strings and list
+            @throws nothing
+            @return list of info
+	    */
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> >{
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... strings){

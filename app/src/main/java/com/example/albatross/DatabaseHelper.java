@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    //this database class created using a tutorial online as help
 
     // Database Version
     private static final int DATABASE_VERSION = 2;
@@ -36,21 +37,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
 
     /**
-     * Constructor
+     * Constructor used to initialize the database and tables
      *
-     * @param context
+     * @param context as the current state of the application
      */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
+    /*	@param db as the current database variable
+	 *
+    	@effects create a new table to store the users
+    	@modifies database
+    	@throws nothing
+    	@return nothing
+	 */
     @Override
     public void onCreate(SQLiteDatabase db) {
         System.out.println("WE HAVE MADE THE DB");
         db.execSQL(CREATE_USER_TABLE);
     }
 
-
+    /*	@param db as the database variable, old version as the old database version, new version as the new version of the database
+	 *
+    	@effects if an upgrade to the database is needed, create a new version and update data
+    	@modifies database
+    	@throws nothing
+    	@return nothing
+	 */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -62,11 +75,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /**
-     * This method is to create user record
-     *
-     * @param user
-     */
+    /*	@param user
+	 *
+    	@effects insert a new user into the database
+    	@modifies database
+    	@throws nothing
+    	@return nothing
+	 **/
     public void addUser(User user) {
         System.out.println("WE ARE ADDING NEW USER");
         SQLiteDatabase db = this.getWritableDatabase();
@@ -92,11 +107,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /**
-     * This method is to fetch all user and return the list of user records
-     *
-     * @return list
-     */
+    /*	@param none
+	 *
+    	@effects none
+    	@modifies database
+    	@throws nothing
+    	@return list of the users currently in the database
+	 */
     public List<User> getAllUser() {
         // array of columns to fetch
         String[] columns = {
@@ -113,11 +130,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // query the user table
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
-         */
         Cursor cursor = db.query(TABLE_USER, //Table to query
                 columns,    //columns to return
                 null,        //columns for the WHERE clause
@@ -146,11 +158,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    /**
-     * This method to update user record
-     *
-     * @param user
-     */
+    /*	@param user
+	 *
+    	@effects update a user in the database
+    	@modifies database
+    	@throws nothing
+    	@return nothing
+	 */
     public void updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -165,11 +179,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /**
-     * This method is to delete user record
-     *
-     * @param user
-     */
+    /*	@param user
+	 *
+    	@effects delete a user from the database
+    	@modifies database
+    	@throws nothing
+    	@return nothing
+	 */
     public void deleteUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         // delete user record by id
@@ -178,12 +194,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /**
-     * This method to check user exist or not
-     *
-     * @param email
-     * @return true/false
-     */
+    /*	@param email
+	 *
+    	@effects check database to see if email exists
+    	@modifies nothing
+    	@throws nothing
+    	@return boolean of whether it is or not in the database
+	 */
     public boolean checkUser(String email) {
 
         // array of columns to fetch
@@ -222,13 +239,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    /**
-     * This method to check user exist or not
-     *
-     * @param email
-     * @param password
-     * @return true/false
-     */
+    /*	@param email, password
+	 *
+    	@effects check database to see if email and password exist
+    	@modifies nothing
+    	@throws nothing
+    	@return boolean of whether it is or not in the database
+	 */
     public boolean checkUser(String email, String password) {
 
         // array of columns to fetch
@@ -242,12 +259,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // selection arguments
         String[] selectionArgs = {email, password};
 
-        // query user table with conditions
-        /**
-         * Here query function is used to fetch records from user table this function works like we use sql query.
-         * SQL query equivalent to this query function is
-         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com' AND user_password = 'qwerty';
-         */
         Cursor cursor = db.query(TABLE_USER, //Table to query
                 columns,                    //columns to return
                 selection,                  //columns for the WHERE clause

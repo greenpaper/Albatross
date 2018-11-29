@@ -7,7 +7,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class HomePageActivity extends AppCompatActivity {
-
+    /*	@param savedInstanceState as the current state of the application
+	 *
+    	@effects initialize process to either log in or register
+    	         if logging in - route to LoginActivity2
+    	         if registering - route to RegisterActivity
+    	@modifies updates state of the application
+    	@throws nothing
+    	@return nothing
+	 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

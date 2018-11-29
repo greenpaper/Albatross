@@ -19,7 +19,13 @@ public class MainActivity extends AppCompatActivity {
     EditText input;
     Button begin;
     SmsManager smsManager = SmsManager.getDefault();
-
+    /*	@param savedInstanceState as the current state of the application
+	 *
+    	@effects initialize route finding and personal user data
+    	@modifies user info when asked
+    	@throws nothing
+    	@return nothing
+	 */
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -40,7 +46,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*	@param view state
+	 *
+    	@effects send message to a fellow contact
+    	@modifies nothing
+    	@throws nothing
+    	@return nothing
+	 */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onSendClick(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
@@ -52,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Message sent!", Toast.LENGTH_SHORT).show();
         }
     }
+    /*	    @param none
+            @effects get permission for user
+            @modifies nothing
+            @throws nothing
+            @return nothing
+	    */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void getPermissionToReadSMS() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
@@ -64,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
                     READ_SMS_PERMISSIONS_REQUEST);
         }
     }
+    /*	    @param code, permission and if able to grant
+            @effects check if permission is given to user
+            @modifies nothing
+            @throws nothing
+            @return nothing
+	    */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],

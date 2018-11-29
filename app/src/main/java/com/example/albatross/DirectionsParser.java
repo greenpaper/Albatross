@@ -11,6 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DirectionsParser {
+    /*	@param jobect to parse
+	 *
+    	@effects parse the route given to user
+    	@modifies nothing
+    	@throws in the case of an error in the json file
+    	@return list of the route
+	 */
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
         List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String, String>>>();
@@ -56,7 +63,13 @@ public class DirectionsParser {
 
         return routes;
     }
-
+    /*	@param encoded
+	 *
+    	@effects parse the encoded message
+    	@modifies nothing
+    	@throws nothing
+    	@return list of the decoded message
+	 */
     private List decodePolyline(String encoded) {
 
         List poly = new ArrayList();
