@@ -4,6 +4,11 @@
     <string name= "Close">Close</string>
     <string name="edit_message">Current Location</string>
     <string name="button_send">Find Route</string>
+    <string name="addc">Add</string>
+    <string name="delc">Del</string>
+    <string name="numberadd">Number to Add</string>
+    <string name="numberdel">Number to Delete</string>
+    <string name="nameadd">Name of Contact</string>
     <string name="destination">Enter Destination</string>
     <string name="todo">TODO</string>
     <string name="login">Login</string>
@@ -21,4 +26,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_maps">Map</string>
+    <!-- test strings -->
+    <string name="error_email_exists">error_email_exists</string>
 </resources>
